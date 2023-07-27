@@ -10,4 +10,5 @@ CREATE TABLE producto(
 	id_categoria_producto INT,
 	CONSTRAINT pk_id_producto PRIMARY KEY(id_producto),
 	CONSTRAINT fk_id_categoria_producto FOREIGN KEY (id_categoria_producto)
-	REFERENCES categoria_producto(id_categoria_producto));
+	REFERENCES categoria_producto(id_categoria_producto)
+);
