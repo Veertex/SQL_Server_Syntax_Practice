@@ -1,24 +1,28 @@
 CREATE PROCEDURE INSERT_CATEGORIES_WITH_PRODUCTS(@Quantity INT)
 AS
+BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION INSERT_CATEGORIES_WITH_PRODUCTS;
-				PRINT 'ON COMMIT TRANSACTION';
-				DECLARE @I_Categories AS INT = 1;
-				WHILE @I_Categories<=@Quantity
-					BEGIN
-						PRINT 'ON CATEGORY WHILE LOOP';
-						INSERT INTO categoria_producto(nombre_categoria)
-						VALUES (CONCAT('Categoria #', @I_Categories));
-						DECLARE @I_Products AS INT = 1;
-						WHILE @I_Products<=@Quantity
-							BEGIN
-								PRINT 'ON PRODUCT WHILE LOOP';
-								INSERT INTO producto(nombre_producto, id_categoria_producto)
-								VALUES (CONCAT('Producto #', @I_Products),@I_Categories);
-								SET @I_Products+=1;
-							END;
-						SET @I_Categories+=1;
-					END;
+			PRINT 'ON COMMIT TRANSACTION';
+				
+				WHILE @Quantity>0 BEGIN
+					
+				INSERT INTO categoria_producto (nombre_categoria)
+				VALUES ('CATEGORIA');
+
+				DECLARE @CATEGORY_ID INT = SCOPE_IDENTITY()
+
+				INSERT INTO producto(nombre_producto, id_categoria_producto)
+				VALUES ('PRODUCTO', @CATEGORY_ID )
+
+
+
+		
+				DECLARE @PRODUCT_ID INT = SCOPE_IDENTITY()
+
+				PRINT @PRODUCT_ID
+				END;
+
 		COMMIT TRANSACTION INSERT_CATEGORIES_WITH_PRODUCTS;
 	END TRY  
 	
@@ -26,4 +30,7 @@ AS
 		PRINT 'ON ROLLBACK TRANSACTION'+ CHAR(13) + ERROR_MESSAGE();		
 		ROLLBACK TRANSACTION INSERT_CATEGORIES_WITH_PRODUCTS;
 	END CATCH 
+END;
 GO
+
+EXEC INSERT_CATEGORIES_WITH_PRODUCTS @Quantity=1
